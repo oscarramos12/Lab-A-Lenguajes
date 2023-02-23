@@ -7,7 +7,7 @@ public class Vertex {
 
 
     public Vertex() {
-        this.id = 0;
+        this.id = 99;
         prevEdge = new ArrayList<Edges>();
         nextEdge = new ArrayList<Edges>();
     }

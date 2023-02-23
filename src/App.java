@@ -1,9 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
-import java.util.zip.CRC32;
-
 
 public class App {
 
@@ -13,9 +9,6 @@ public class App {
 
         Stack<Vertex> inicio = new Stack<Vertex>();
         Stack<Vertex> fin = new Stack<Vertex>();
-
-        List<Character> todo = Arrays.asList('+','*','?','|','^');
-
         int vertexCount = 0;
 
         System.out.println(postfix);
@@ -126,7 +119,26 @@ public class App {
                 Vertex newInicio = new Vertex();
                 Vertex newFin = new Vertex();
 
+                Edges newInicioToOld = createEpsilon(newInicio, oldInicio);
+                Edges newInicioToNewFin = createEpsilon(newInicio, newFin);
 
+                ArrayList<Edges> edgesNewInicio = new ArrayList<Edges>();
+                edgesNewInicio.add(newInicioToOld);
+                edgesNewInicio.add(newInicioToNewFin);
+
+                newInicio.setAll(null, edgesNewInicio, vertexCount);
+                vertexCount++;
+
+                Edges backToOldInicio = createEpsilon(oldFin, oldInicio);
+                Edges oldFinToNew = createEpsilon(oldFin, newFin);
+
+                ArrayList<Edges> oldFinEdges = new ArrayList<Edges>();
+                oldFinEdges = oldFin.getPrevEdges();
+                oldFinEdges.add(backToOldInicio);
+                oldFinEdges.add(oldFinToNew);
+
+                fin.push(newFin);
+                inicio.push(newInicio);
 
             }
         }
