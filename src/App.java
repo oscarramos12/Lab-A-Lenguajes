@@ -128,6 +128,8 @@ public class App {
 
                 newInicio.setAll(null, edgesNewInicio, vertexCount);
                 vertexCount++;
+                newFin.setID(vertexCount);
+                vertexCount++;
 
                 Edges backToOldInicio = createEpsilon(oldFin, oldInicio);
                 Edges oldFinToNew = createEpsilon(oldFin, newFin);
@@ -136,6 +138,8 @@ public class App {
                 oldFinEdges = oldFin.getPrevEdges();
                 oldFinEdges.add(backToOldInicio);
                 oldFinEdges.add(oldFinToNew);
+
+                oldFin.setNextEdge(oldFinEdges);
 
                 fin.push(newFin);
                 inicio.push(newInicio);
