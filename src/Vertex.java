@@ -4,12 +4,14 @@ public class Vertex {
     public int id;
     public ArrayList<Edges> prevEdge;
     public ArrayList<Edges> nextEdge;
+    public boolean visited;
 
 
     public Vertex() {
         this.id = 99;
         prevEdge = new ArrayList<Edges>();
         nextEdge = new ArrayList<Edges>();
+        visited = false;
     }
 
     public void setNextEdge(ArrayList<Edges> nextEdge){
@@ -20,6 +22,10 @@ public class Vertex {
     }
     public void setID(int id){
         this.id = id;
+    }
+
+    public void setVisited(boolean visited){
+        this.visited = visited;
     }
 
     public void setAll(ArrayList<Edges> prevEdge, ArrayList<Edges> nextEdge, int id){
@@ -39,4 +45,9 @@ public class Vertex {
     public int getID(){
         return id;
     }
+
+    public boolean getVisited(){
+        return visited;
+    }
+
 }

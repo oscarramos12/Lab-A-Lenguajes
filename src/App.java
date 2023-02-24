@@ -1,21 +1,25 @@
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.List;
+import java.util.Arrays;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
-        String input = "(a|b)*abb";
+        String input = "(a|b)*(b|a)*abb";
         String postfix = InFixPostFix.toPostFix(input);
+        List<Character> operadores = Arrays.asList('|', '?', '+', '*', '^', '.');
+
 
         Stack<Vertex> inicio = new Stack<Vertex>();
         Stack<Vertex> fin = new Stack<Vertex>();
-        int vertexCount = 0;
+        int vertexCount = 1;
 
         System.out.println(postfix);
             
         for(int i = 0; i < postfix.length(); i++){
             Character char1 = postfix.charAt(i);
-            if(Character.isLetter(char1)){
+            if(!operadores.contains(char1)){
                 Vertex startVertex = new Vertex();
                 Vertex endVertex = new Vertex();
 
@@ -87,8 +91,8 @@ public class App {
                 ArrayList<Edges> nextListBot = new ArrayList<Edges>();
                 nextListTop.add(topEpsilon2);
                 nextListBot.add(botEpsilon2);
-                topFin.setPrevEdge(nextListTop);
-                botFin.setPrevEdge(nextListBot);
+                topFin.setNextEdge(nextListTop);
+                botFin.setNextEdge(nextListBot);
 
                 inicio.push(newInicio);
                 fin.push(newFin);
@@ -146,6 +150,7 @@ public class App {
 
             }
         }
+        graficaAFN.graficar(inicio.pop(), fin.pop());
     }
 
     public static Edges createEpsilon(Vertex startVertex, Vertex endVertex){
