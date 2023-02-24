@@ -52,10 +52,10 @@ public class graficaAFN {
         }
         
         Layout<Integer, String> layout = new CircleLayout<Integer, String>(graph);
-        layout.setSize(new Dimension(550, 550));
+        layout.setSize(new Dimension(750, 750));
         
         VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(layout);
-        vv.setPreferredSize(new Dimension(600, 600));
+        vv.setPreferredSize(new Dimension(800, 800));
         
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
         vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());

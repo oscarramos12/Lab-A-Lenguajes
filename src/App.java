@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        String input = "(a|b)*(b|a)*abb";
+        String input = "(a|b)*a(a|b)(a|b)";
         String postfix = InFixPostFix.toPostFix(input);
         List<Character> operadores = Arrays.asList('|', '?', '+', '*', '^', '.');
 
