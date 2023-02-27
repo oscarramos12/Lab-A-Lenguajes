@@ -6,10 +6,14 @@ import java.util.Arrays;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        String input = "(a|b)*a(a|b)(a|b)";
-        String postfix = InFixPostFix.toPostFix(input);
-        List<Character> operadores = Arrays.asList('|', '?', '+', '*', '^', '.');
-
+        //(\"(.(;(.;(.|;)+)*)*)*
+        //((ε|a)b*)*
+        //(.|;)*-/.(.|;)*
+        //(x|t)+((a|m)?)+
+        String input = "(x|t)+((a|m)?)+";
+        Character concat = '#';
+        String postfix = InFixPostFix.toPostFix(input,concat);
+        List<Character> operadores = Arrays.asList('|', '?', '+', '*', '^',concat);
 
         Stack<Vertex> inicio = new Stack<Vertex>();
         Stack<Vertex> fin = new Stack<Vertex>();
@@ -97,7 +101,7 @@ public class App {
                 inicio.push(newInicio);
                 fin.push(newFin);
             }
-            else if(char1.equals('.')){
+            else if(char1.equals(concat)){
                 Vertex newFin = fin.pop();
                 Vertex connect = fin.pop();
                 Vertex getEdge = inicio.pop();

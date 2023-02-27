@@ -14,13 +14,13 @@ public class InFixPostFix {
             return false;
     }
  
-    static int getPrecedence(char ch)
+    static int getPrecedence(char ch, Character concat)
     {
         if(ch == '(')
             return 1;
         else if(ch == '|')
             return 2;
-        else if(ch == '.')
+        else if(ch == concat)
             return 3;
         else if (ch == '+' || ch == '?' || ch =='*')
             return 4;
@@ -31,7 +31,7 @@ public class InFixPostFix {
     }
     
    
-    public static String newFormat(String expresion) {
+    public static String newFormat(String expresion, Character concat) {
         List<Character> todo = Arrays.asList('+','*','?','|','^');
         String formateado = new String();
         
@@ -42,10 +42,10 @@ public class InFixPostFix {
             if (i + 1 < expresion.length()) {
                 Character char2 = expresion.charAt(i + 1);
 
-                formateado += char1;
+                formateado += Character.toString(char1);
 
                 if ((!char1.equals('(') && !char2.equals(')') && !(char1 == '|' || char1 == '^') && !todo.contains(char2))) {
-                    formateado += '.';
+                    formateado += concat;
                 }
             }
         }
@@ -54,12 +54,87 @@ public class InFixPostFix {
         return formateado;
     }
 
-    public static String toPostFix(String expression)
+    public static String cambioMas(String expresion){
+        for (int i = 0; i < expresion.length(); i++) {
+
+            Character char1 = expresion.charAt(i);
+
+            if (char1.equals('+')) {
+
+                if (Character.toString(expresion.charAt(i-1)).equals(")")) {
+
+                    int parentesis = 0;
+
+                    for (int x = (i-1); x >= 0; x--) {
+                        if ((x != (i-1)) && (Character.toString(expresion.charAt(x)).equals(")"))) {
+
+                            parentesis++;
+
+                        }
+
+                        if ((Character.toString(expresion.charAt(x)).equals("("))) {
+                            if (parentesis != 0) {
+                                parentesis--;
+                            } 
+                            else {
+
+                                String repetir = (String) expresion.subSequence(x, i);
+                                expresion = expresion.substring(0, x) + repetir + repetir + "*" + expresion.substring(i+1);
+
+                            }
+                        }
+                    }
+                } 
+                else {
+
+                    String repetir = Character.toString(expresion.charAt(i-1));
+                    expresion = expresion.substring(0, i-1) + repetir + repetir + "*" +expresion.substring(i+1);
+
+                }
+            }
+        }
+        return expresion;
+    }
+
+    public static String cambioInterrogacion(String expresion){
+        for (int i = 0; i < expresion.length(); i++) {
+
+            Character char1 = expresion.charAt(i);
+            
+            if (char1.equals('?')) {
+
+                if (Character.toString(expresion.charAt(i-1)).equals(")")) {
+
+                    for (int x = (i-1); x >= 0; x--) {
+
+                        if ((Character.toString(expresion.charAt(x)).equals("("))) {
+                            if (x != 0) {
+                                
+                                String cambioExpresion = (String) expresion.subSequence(x, i);
+                                expresion = expresion.substring(0, x) + "(" + cambioExpresion + "|ε)" + expresion.substring(i+1);
+                                break;
+
+                            }
+                        }
+                    }
+                    
+                } 
+                else {                    
+                    expresion = expresion.substring(0, i-1) + "(" + Character.toString(expresion.charAt(i-1)) + "|ε)" + expresion.substring(i+1);
+                }
+            }
+        }
+        return expresion;
+    }
+
+    public static String toPostFix(String expression, Character concat)
     {
         Stack<Character> stack = new Stack<>();
  
         String output = new String("");
-        expression = newFormat(expression);
+        expression = newFormat(expression,concat);
+        expression = cambioInterrogacion(expression);
+        expression = cambioMas(expression);
 
         for (int i = 0; i < expression.length(); ++i) {
             char c = expression.charAt(i);
@@ -79,7 +154,7 @@ public class InFixPostFix {
             }
  
             else {
-                while (!stack.isEmpty() && getPrecedence(c) <= getPrecedence(stack.peek())) {
+                while (!stack.isEmpty() && getPrecedence(c, concat) <= getPrecedence(stack.peek(), concat)) {
                     output += stack.pop();
                 }
                 stack.push(c);
@@ -96,7 +171,7 @@ public class InFixPostFix {
  
     /*public static void main(String[] args)
     {
-        String expression = "(b|b)*abb(a|b)*";
+        String expression = "(x|t)+((a|m)?)+";
         System.out.println(toPostFix(expression));
     }*/
 }

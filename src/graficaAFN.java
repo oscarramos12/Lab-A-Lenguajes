@@ -4,11 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.*;
 import edu.uci.ics.jung.graph.*;
 import edu.uci.ics.jung.visualization.*;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Comparator;
 
 public class graficaAFN {
 
