@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class graficaAFN {
 
 
-    public static void graficar(Vertex nodoInicial, Vertex nodoFinal) {
+    public static void graficar(Vertex nodoInicial, String graphName) {
 
         Graph<Integer, String> graph = new DirectedSparseGraph<Integer, String>();
 
@@ -19,13 +19,15 @@ public class graficaAFN {
         ArrayList<Integer> hasVertex = new ArrayList<Integer>();
         int epsilonCounter = 0;
 
-        ArrayList<Edges> getNextVert = nodoInicial.getNextEdges();
+        /*ArrayList<Edges> getNextVert = nodoInicial.getNextEdges();
         for (int i = 0; i < getNextVert.size(); i++){
             graph.addVertex(getNextVert.get(i).getDestVert().getID());
             graph.addEdge(Character.toString(getNextVert.get(i).getID()) + "-" + epsilonCounter, nodoInicial.getID(), getNextVert.get(i).getDestVert().getID());
             esperando.add(getNextVert.get(i).getDestVert());
             epsilonCounter++;
-        }
+        }*/
+
+        esperando.add(nodoInicial);
         
         while(!esperando.isEmpty()){
             Vertex newVert = esperando.remove(0);
@@ -39,13 +41,14 @@ public class graficaAFN {
                     graph.addEdge(Character.toString(getNextVerts.get(i).getID()) + "-" + epsilonCounter, newVert.getID(), getNextVerts.get(i).getDestVert().getID());
                     hasEdge.add(Integer.toString(getNextVerts.get(i).getInitVert().getID()) + "-" + Integer.toString(getNextVerts.get(i).getDestVert().getID()));
                 }
-                if(!getNextVerts.get(i).getDestVert().getVisited()){
+                if(!getNextVerts.get(i).getDestVert().getVisitedGraph()){
                     esperando.add(getNextVerts.get(i).getDestVert());
                 }
                 epsilonCounter++;
-                newVert.setVisited(true);
+                newVert.setVisitedGraph(true);
             }
         }
+
         
         Layout<Integer, String> layout = new CircleLayout<Integer, String>(graph);
         layout.setSize(new Dimension(750, 750));
@@ -56,7 +59,7 @@ public class graficaAFN {
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
         vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());
                 
-        JFrame frame = new JFrame("One Directional Graph");
+        JFrame frame = new JFrame(graphName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();

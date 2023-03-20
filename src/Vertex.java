@@ -4,14 +4,21 @@ public class Vertex {
     public int id;
     public ArrayList<Edges> prevEdge;
     public ArrayList<Edges> nextEdge;
-    public boolean visited;
+    public boolean visitedGraph;
+    public boolean visitedAFD;
+    public boolean isInit;
+    public boolean isEnd;
 
 
     public Vertex() {
         this.id = 99;
         prevEdge = new ArrayList<Edges>();
         nextEdge = new ArrayList<Edges>();
-        visited = false;
+        visitedGraph = false;
+        visitedAFD = false;
+        isInit = false;
+        isEnd = false;
+
     }
 
     public void setNextEdge(ArrayList<Edges> nextEdge){
@@ -24,14 +31,26 @@ public class Vertex {
         this.id = id;
     }
 
-    public void setVisited(boolean visited){
-        this.visited = visited;
+    public void setVisitedGraph(boolean visited){
+        this.visitedGraph = visited;
+    }
+
+    public void setVisitedAFD(boolean visited){
+        this.visitedAFD = visited;
     }
 
     public void setAll(ArrayList<Edges> prevEdge, ArrayList<Edges> nextEdge, int id){
         this.nextEdge = nextEdge;
         this.prevEdge = prevEdge;
         this.id = id;
+    }
+
+    public void setIsEnd(boolean isEnd){
+        this.isEnd = isEnd;
+    }
+
+    public void setIsInit(boolean isInit){
+        this.isInit = isInit;
     }
 
     public ArrayList<Edges> getNextEdges(){
@@ -46,8 +65,18 @@ public class Vertex {
         return id;
     }
 
-    public boolean getVisited(){
-        return visited;
+    public boolean getVisitedGraph(){
+        return visitedGraph;
+    }
+    public boolean getVisitedAFD(){
+        return visitedAFD;
+    }
+    public boolean getIsInit(){
+        return isInit;
+    }
+
+    public boolean getIsEnd(){
+        return isEnd;
     }
 
 }
