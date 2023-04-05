@@ -10,7 +10,7 @@ public class createTree {
     public createTree(String postfix, Character concat) {
         operators = new HashSet<>();
         operators.add('+');
-        //operators.add(concat);
+        operators.add(concat);
         operators.add('*');
         operators.add('|');
         operators.add('^');
@@ -21,7 +21,7 @@ public class createTree {
         Stack<treeNode> stack = new Stack<>();
         Character c;
         String word;
-        for (int i = 0; i < postfix.length(); i++) {
+        for (int i = 0; i < postfix.length()-1; i++) {
             c = postfix.charAt(i);
             //if(c == '9'){
                 System.out.println(c);
