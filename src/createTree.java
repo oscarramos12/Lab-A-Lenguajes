@@ -23,6 +23,10 @@ public class createTree {
         String word;
         for (int i = 0; i < postfix.length(); i++) {
             c = postfix.charAt(i);
+            //if(c == '9'){
+                System.out.println(c);
+            //}
+            
             if(c != ' '){
                 if (operators.contains(c)) {
                     treeNode right = stack.pop();
@@ -33,12 +37,12 @@ public class createTree {
                     stack.push(node);
                 } else {
                     word = "";
-                    for (int getWord = i+1; getWord < postfix.length(); getWord++){
+                    for (int getWord = i; getWord < postfix.length(); getWord++){
                         if(!operators.contains(postfix.charAt(getWord)) && postfix.charAt(getWord) != ' '){
                             word += postfix.charAt(getWord);
                         }
-                        else if(postfix.charAt(getWord) == ' '){
-                            i = getWord - i - 1;
+                        else if(postfix.charAt(getWord) == ' ' || operators.contains(postfix.charAt(getWord))){
+                            i = word.length() + i - 1;
                             break;
                         }
                     }

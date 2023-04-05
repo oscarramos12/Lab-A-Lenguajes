@@ -21,10 +21,12 @@ public class arbolLex {
             HashMap<String,String> conjOperaciones = new HashMap<String, String>();
             HashMap<String, String> simpleIDs = new HashMap<String, String>();
             HashMap<String, String> reverse = new HashMap<String, String>();
-            String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
-            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
+            /*String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";*/
+            String abc = "a|b|c";
+            String ABC = "A|B|C";
             String abcTODO = "abcdefghijklmnopqertuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            String numeros = "0|1|2|3|4|5|6|7|8|9|";
+            String numeros = "0|1|2|3|4|5|6|7|8|9";
             String line;
             String key;
             int keyInt = 0;
@@ -271,7 +273,7 @@ public class arbolLex {
                                 }
                             }
                             if(!token.contains("(*")){
-                                bigExpression += "(" + token + ")|";
+                                bigExpression += "(" + "(null)" + token + ")|";
                                 conjOperaciones.remove(token);
                                 }
                             }
@@ -280,32 +282,39 @@ public class arbolLex {
                 }   
             }
             System.out.println("BIG EXPRESSION: " + bigExpression);
-            String newFormatBig = newFormatTree(bigExpression, '@');
-            String postFix = newToPostFix(newFormatBig, '@');
+            /*String newFormatBig = newFormatTree(bigExpression, '@');
+            String postFix = newToPostFix(newFormatBig, '@');*/
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);
             allMaps.add(newIDs);
-            List<Character> todo = Arrays.asList('*','|','^', '@');
+            allMaps.add(conjOperaciones);
+            List<Character> todo = Arrays.asList('*','|','^', '@','(',')');
             for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
-                for (int i = 0; i < postFix.length(); i++){
-                    if(!todo.contains(postFix.charAt(i))){
+                for (int i = 0; i < bigExpression.length(); i++){
+                    if(!todo.contains(bigExpression.charAt(i)) && bigExpression.charAt(i) != ' '){
                         String word = "";
-                        for (int getWord = i; getWord < postFix.length(); getWord++){
-                            if(!todo.contains(postFix.charAt(getWord)) && postFix.charAt(getWord) != ' '){
-                                word += postFix.charAt(getWord);
+                        for (int getWord = i; getWord < bigExpression.length(); getWord++){
+                            if(!todo.contains(bigExpression.charAt(getWord)) && bigExpression.charAt(getWord) != ' '){
+                                word += bigExpression.charAt(getWord);
                             }
-                            else if((!word.equals("")) && postFix.charAt(getWord) == ' '){
-                                
-                                String inicio = postFix.substring(0, getWord-1);
-                                String fin = postFix.substring(getWord, postFix.length()-1);
+                            else if((!word.equals("")) && (bigExpression.charAt(getWord) == ' ' || todo.contains(bigExpression.charAt(getWord)))){
+                                String inicio = "";
+                                if(i == 0){
+                                    inicio = bigExpression.substring(0, 0);
+                                }
+                                else{
+                                    inicio = bigExpression.substring(0, i);
+                                }
+                                String fin = bigExpression.substring(getWord, bigExpression.length());
                                 if(allMaps.get(mapIndex).containsKey(word)){
                                     String replace = allMaps.get(mapIndex).get(word);
-                                    postFix = inicio + replace + fin;
-                                    i = (getWord+replace.length())-1;
+                                    bigExpression = inicio + replace + fin;
+                                    i = inicio.length() + replace.length()-1;
                                     break;
                                 }
                                 else{
-                                    i += getWord - i -1;
+                                    bigExpression = inicio + word + fin;
+                                    i = inicio.length() + word.length()-1;
                                     break;
                                 }
                                 
@@ -315,8 +324,14 @@ public class arbolLex {
                     //postFix = postFix.replace(key, value);
                 }
             }
+
+            
             //ws b b d |c |*@ID @|e . e |ε |@f g - |ε |e @@ε |@NUMBER @|0 SEMICOLON @|1 ASSIGNOP @|2 LT @|3 EQ @|4 PLUS @|5 MINUS @|6 TIMES @|7 DIV @|8 LPAREN @|9 RPAREN @||
+            System.out.println("NU:" + bigExpression);
+            String newFormatBig = newFormatTree(bigExpression, '@');
+            String postFix = newToPostFix(newFormatBig, '@');
             System.out.println("POSTFIX:" + postFix);
+            createTree root = new createTree(postFix, '@');
             reader.close();
         }catch (IOException e){
                 System.err.println("Error reading file: " + e.getMessage());
