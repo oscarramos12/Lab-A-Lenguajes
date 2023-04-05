@@ -385,7 +385,9 @@ public class AFD {
                     if(newPi.get(i).size() > 1){
                         for (int j = 1; j < newPi.get(i).size(); j++){
                             int rem = newPi.get(i).get(j);
-                            returnMatrix.remove(rem);
+                            if(returnMatrix.size() < rem){
+                                returnMatrix.remove(rem);
+                            }
                             for(int x = 0; x < aceptacion.size(); x++){
                                 aceptacion.set(x, aceptacion.get(x)-1);
                             }

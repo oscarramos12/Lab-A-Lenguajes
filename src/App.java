@@ -8,8 +8,8 @@ public class App {
         //(.|;)*-/.(.|;)*
         //(x|t)+((a|m)?)+
         //("(.(;(.;(.|;)+)*)*)*)
-        String input = "(a|ε)b(a+)c?";
-        Character concat = '%';
+        String input = "(a|b)*a(a|b)(a|b)";
+        Character concat = '@';
         ArrayList<Vertex> endsAFN = AFN.doAFN(input,concat);
         Vertex inicioAFD = AFD.doAFD(endsAFN.get(0), concat, input, endsAFN.get(1));       
         graficaAFN.graficar(endsAFN.get(0), "AFN");

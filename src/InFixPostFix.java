@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 
 public class InFixPostFix {
-    private static boolean letterOrDigit(char c)
+    public static boolean letterOrDigit(char c)
     {
         if (Character.isLetterOrDigit(c))
             return true;
@@ -14,7 +14,7 @@ public class InFixPostFix {
             return false;
     }
  
-    static int getPrecedence(char ch, Character concat)
+    public static int getPrecedence(char ch, Character concat)
     {
         if(ch == '(')
             return 1;
@@ -169,9 +169,11 @@ public class InFixPostFix {
         return output;
     }
  
-    /*public static void main(String[] args)
+    public static void main(String[] args)
     {
+        //(x|t)+((a|m)?)+
+        //((e.((.|e)|ε).(f.(((g|-)|ε).e)|ε)).x)
         String expression = "(x|t)+((a|m)?)+";
-        System.out.println(toPostFix(expression));
-    }*/
+        System.out.println(toPostFix(expression, '%'));
+    }
 }
