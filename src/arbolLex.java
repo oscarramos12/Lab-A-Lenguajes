@@ -51,7 +51,7 @@ public class arbolLex {
                                 String[] separacion = line.split("=");
                                 String value = separacion[1].replace("' '", "'_'");
                                 value = value.replace(" ", "");
-                                value = value.replace("'_'", "' '");
+                                value = value.replace("'_'", "emptySpace");
                                 //System.out.println("VALUE: "  + value);
                                 if(value.charAt(0) == '[' && value.charAt(1) == '\'' && value.charAt(value.length()-1) == ']' && value.charAt(value.length()-2) == '\''){
                                     int startIndex = value.indexOf('[') + 1;
