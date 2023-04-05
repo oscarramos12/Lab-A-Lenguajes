@@ -10,7 +10,7 @@ public class createTree {
     public createTree(String postfix, Character concat) {
         operators = new HashSet<>();
         operators.add('+');
-        operators.add(concat);
+        //operators.add(concat);
         operators.add('*');
         operators.add('|');
         operators.add('^');
@@ -29,12 +29,21 @@ public class createTree {
             
             if(c != ' '){
                 if (operators.contains(c)) {
-                    treeNode right = stack.pop();
-                    treeNode left = stack.pop();
-                    treeNode node = new treeNode(Character.toString(c));
-                    node.left = left;
-                    node.right = right;
-                    stack.push(node);
+                    if(c != '*'){
+                        treeNode right = stack.pop();
+                        treeNode left = stack.pop();
+                        treeNode node = new treeNode(Character.toString(c));
+                        node.setHoja(left);
+                        node.setHoja(right);
+                        stack.push(node);
+                    }
+                    else{
+                        treeNode single = stack.pop();
+                        treeNode node = new treeNode(Character.toString(c));
+                        node.setHoja(single);
+                        stack.push(node);
+                    }
+                    
                 } else {
                     word = "";
                     for (int getWord = i; getWord < postfix.length(); getWord++){

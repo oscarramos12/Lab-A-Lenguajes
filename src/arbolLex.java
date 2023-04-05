@@ -281,14 +281,12 @@ public class arbolLex {
                 }   
             }
             System.out.println("BIG EXPRESSION: " + bigExpression);
-            /*String newFormatBig = newFormatTree(bigExpression, '@');
-            String postFix = newToPostFix(newFormatBig, '@');*/
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);
-            allMaps.add(newIDs);
+            /*allMaps.add(newIDs);
             allMaps.add(conjOperaciones);
             allMaps.add(simpleIDs);
-            allMaps.add(conjOperaciones);
+            allMaps.add(conjOperaciones);*/
             List<Character> todo = Arrays.asList('*','|','^', '@','(',')');
             for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
                 for (int i = 0; i < bigExpression.length(); i++){
