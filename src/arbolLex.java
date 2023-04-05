@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class arbolLex {
     public static void readYal(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-3.yal";
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
         processToken(processLet(dir), dir);
     }
 
@@ -286,6 +286,8 @@ public class arbolLex {
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);
             allMaps.add(newIDs);
+            allMaps.add(conjOperaciones);
+            allMaps.add(simpleIDs);
             allMaps.add(conjOperaciones);
             List<Character> todo = Arrays.asList('*','|','^', '@','(',')');
             for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
