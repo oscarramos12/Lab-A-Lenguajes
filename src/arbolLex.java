@@ -280,6 +280,7 @@ public class arbolLex {
                     }
                 }   
             }
+            bigExpression = bigExpression.substring(0, bigExpression.length()-1);
             System.out.println("BIG EXPRESSION: " + bigExpression);
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);

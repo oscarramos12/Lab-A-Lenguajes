@@ -21,7 +21,7 @@ public class createTree {
         Stack<treeNode> stack = new Stack<>();
         Character c;
         String word;
-        for (int i = 0; i < postfix.length()-1; i++) {
+        for (int i = 0; i < postfix.length(); i++) {
             c = postfix.charAt(i);
             //if(c == '9'){
                 System.out.println(c);
