@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class arbolLex {
     public static void readYal(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-3.yal";
         processToken(processLet(dir), dir);
     }
 
@@ -49,9 +49,8 @@ public class arbolLex {
                                 //System.out.println(line.charAt(i+1) + "|" +line.charAt(i+4));
                                 //si es un conjunto sin operaciones
                                 String[] separacion = line.split("=");
-                                String value = separacion[1].replace("' '", "'_'");
+                                String value = separacion[1].replace("' '", "'empty'");
                                 value = value.replace(" ", "");
-                                value = value.replace("'_'", "emptySpace");
                                 //System.out.println("VALUE: "  + value);
                                 if(value.charAt(0) == '[' && value.charAt(1) == '\'' && value.charAt(value.length()-1) == ']' && value.charAt(value.length()-2) == '\''){
                                     int startIndex = value.indexOf('[') + 1;

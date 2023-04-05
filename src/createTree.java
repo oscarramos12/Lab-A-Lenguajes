@@ -46,7 +46,7 @@ public class createTree {
                             break;
                         }
                     }
-                    if(word.equals("emptySpace")){
+                    if(word.equals("empty")){
                         treeNode node = new treeNode(" ");
                         stack.push(node);
                     }
