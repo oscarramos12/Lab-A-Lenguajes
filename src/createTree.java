@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -6,10 +7,11 @@ import java.util.Stack;
 public class createTree {
     treeNode root;
     Set<Character> operators;
+    HashMap<String, String> newIDs;
 
-    public createTree(String postfix, Character concat) {
+    public createTree(String postfix, Character concat, HashMap<String, String> newIDs) {
         operators = new HashSet<>();
-        operators.add('+');
+        this.newIDs = newIDs;
         operators.add(concat);
         operators.add('*');
         operators.add('|');
@@ -23,9 +25,7 @@ public class createTree {
         String word;
         for (int i = 0; i < postfix.length(); i++) {
             c = postfix.charAt(i);
-            //if(c == '9'){
-                System.out.println(c);
-            //}
+            System.out.println(c);
             
             if(c != ' '){
                 if (operators.contains(c)) {
@@ -57,6 +57,11 @@ public class createTree {
                     }
                     if(word.equals("empty")){
                         treeNode node = new treeNode(" ");
+                        stack.push(node);
+                    }
+                    else if(newIDs.containsKey(word)){
+                        treeNode node = new treeNode(newIDs.get(word));
+                        System.out.println(newIDs.get(word));
                         stack.push(node);
                     }
                     else{

@@ -218,7 +218,7 @@ public class arbolLex {
             HashMap<String, String> conjOperaciones = results.get(0);
             HashMap<String, String> simpleIDs = results.get(1);
             HashMap<String, String> newIDs = new HashMap<String, String>();
-            int newIDsInt = 0;
+            int newIDsInt = 10000000;
             String bigExpression = "";
             while ((line = reader.readLine()) != null) {
                 if(line.contains("rule tokens")){
@@ -236,13 +236,6 @@ public class arbolLex {
                                     }
                                 }
                                 if(conjOperaciones.containsKey(token)){
-                                    //String replace = conjOperaciones.get(token);
-
-                                    /*for (Map.Entry<String, String> entry : simpleIDs.entrySet()) {
-                                        String key = entry.getKey();
-                                        String value = entry.getValue();
-                                        replace = replace.replace(key, value);
-                                    }*/
                                     int inicio = line.indexOf("{");
                                     int fin = line.indexOf("}");
                                     String dummy = line.substring(inicio+1, fin);
@@ -284,10 +277,9 @@ public class arbolLex {
             System.out.println("BIG EXPRESSION: " + bigExpression);
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);
-            /*allMaps.add(newIDs);
             allMaps.add(conjOperaciones);
             allMaps.add(simpleIDs);
-            allMaps.add(conjOperaciones);*/
+            allMaps.add(conjOperaciones);
             List<Character> todo = Arrays.asList('*','|','^', '@','(',')');
             for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
                 for (int i = 0; i < bigExpression.length(); i++){
@@ -331,7 +323,7 @@ public class arbolLex {
             String newFormatBig = newFormatTree(bigExpression, '@');
             String postFix = newToPostFix(newFormatBig, '@');
             System.out.println("POSTFIX:" + postFix);
-            createTree root = new createTree(postFix, '@');
+            createTree root = new createTree(postFix, '@', newIDs);
             reader.close();
         }catch (IOException e){
                 System.err.println("Error reading file: " + e.getMessage());
