@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Stack;
@@ -11,7 +10,7 @@ import java.util.Stack;
 
 public class arbolLex {
     public static void readYal(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-1.yal";
         processToken(processLet(dir), dir);
     }
 
@@ -23,7 +22,6 @@ public class arbolLex {
             HashMap<String, String> reverse = new HashMap<String, String>();
             String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
             String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
-            String abcTODO = "abcdefghijklmnopqertuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             String numeros = "0|1|2|3|4|5|6|7|8|9";
             String line;
             String key;
@@ -315,11 +313,12 @@ public class arbolLex {
             String newFormatBig = newFormatTree(bigExpression, '@');
             String postFix = newToPostFix(newFormatBig, '@');
             System.out.println("POSTFIX:" + postFix);
-            createTree root = new createTree(postFix, '@', newIDs);
+            createTree create = new createTree('@', newIDs);
+            treeNode root = create.buildTree(postFix);
+            pruebas.graficardd(root);
             reader.close();
         }catch (IOException e){
                 System.err.println("Error reading file: " + e.getMessage());
-                //return null;
             }
     }
 

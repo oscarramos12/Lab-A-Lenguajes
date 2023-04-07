@@ -9,17 +9,16 @@ public class createTree {
     Set<Character> operators;
     HashMap<String, String> newIDs;
 
-    public createTree(String postfix, Character concat, HashMap<String, String> newIDs) {
+    public createTree(Character concat, HashMap<String, String> newIDs) {
         operators = new HashSet<>();
         this.newIDs = newIDs;
         operators.add(concat);
         operators.add('*');
         operators.add('|');
         operators.add('^');
-        buildTree(postfix);
     }
 
-    private void buildTree(String postfix) {
+    public treeNode buildTree(String postfix) {
         Stack<treeNode> stack = new Stack<>();
         Character c;
         String word;
@@ -76,6 +75,6 @@ public class createTree {
             }
         }
 
-        root = stack.pop();
+         return root = stack.pop();
     }
 }
