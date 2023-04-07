@@ -25,7 +25,10 @@ public class createTree {
         String word;
         for (int i = 0; i < postfix.length(); i++) {
             c = postfix.charAt(i);
-            System.out.println(c);
+            /*if(c == 'N'){
+                System.out.println(c);
+            }*/
+            
             
             if(c != ' '){
                 if (operators.contains(c)) {
@@ -61,7 +64,7 @@ public class createTree {
                     }
                     else if(newIDs.containsKey(word)){
                         treeNode node = new treeNode(newIDs.get(word));
-                        System.out.println(newIDs.get(word));
+                        //System.out.println(newIDs.get(word));
                         stack.push(node);
                     }
                     else{

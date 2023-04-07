@@ -1,68 +1,43 @@
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import edu.uci.ics.jung.algorithms.layout.*;
-import edu.uci.ics.jung.graph.*;
-import edu.uci.ics.jung.visualization.*;
+import edu.uci.ics.jung.graph.DelegateTree;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import java.util.ArrayList;
+import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 
 public class graficarTree {
 
-    public static void graficar(Vertex nodoInicial, String graphName) {
+    public static void main(String[] args) {
 
-        Graph<Integer, String> graph = new DirectedSparseGraph<Integer, String>();
+        // Create a DelegateTree object
+        DelegateTree<String, Integer> tree = new DelegateTree<>();
 
-        graph.addVertex(nodoInicial.getID());
-        ArrayList<Vertex> esperando = new ArrayList<Vertex>();
-        ArrayList<String> hasEdge = new ArrayList<String>();
-        ArrayList<Integer> hasVertex = new ArrayList<Integer>();
-        int epsilonCounter = 0;
+        // Add nodes to the tree
+        tree.addVertex("deezRoot");
+        tree.addChild(1, "deezRoot", "ddeez", EdgeType.DIRECTED);
+        tree.addChild(2, "deezRoot", "nutz" , EdgeType.DIRECTED);
 
-        /*ArrayList<Edges> getNextVert = nodoInicial.getNextEdges();
-        for (int i = 0; i < getNextVert.size(); i++){
-            graph.addVertex(getNextVert.get(i).getDestVert().getID());
-            graph.addEdge(Character.toString(getNextVert.get(i).getID()) + "-" + epsilonCounter, nodoInicial.getID(), getNextVert.get(i).getDestVert().getID());
-            esperando.add(getNextVert.get(i).getDestVert());
-            epsilonCounter++;
-        }*/
+        tree.addVertex("NuRoot");
+        tree.addChild(1,"NuRoot", "deezRoot");
 
-        esperando.add(nodoInicial);
-        
-        while(!esperando.isEmpty()){
-            Vertex newVert = esperando.remove(0);
-            ArrayList<Edges> getNextVerts = newVert.getNextEdges();
-            for (int i = 0; i < getNextVerts.size(); i++){
-                if(!hasVertex.contains(getNextVerts.get(i).getDestVert().getID())){
-                    graph.addVertex(getNextVerts.get(i).getDestVert().getID());
-                    hasVertex.add(getNextVerts.get(i).getDestVert().getID());
-                }
-                if(!hasEdge.contains(Integer.toString(getNextVerts.get(i).getInitVert().getID()) + "-" + Integer.toString(getNextVerts.get(i).getDestVert().getID()))){
-                    graph.addEdge(Character.toString(getNextVerts.get(i).getID()) + "-" + epsilonCounter, newVert.getID(), getNextVerts.get(i).getDestVert().getID());
-                    hasEdge.add(Integer.toString(getNextVerts.get(i).getInitVert().getID()) + "-" + Integer.toString(getNextVerts.get(i).getDestVert().getID()));
-                }
-                if(!getNextVerts.get(i).getDestVert().getVisitedGraph()){
-                    esperando.add(getNextVerts.get(i).getDestVert());
-                }
-                epsilonCounter++;
-                newVert.setVisitedGraph(true);
-            }
-        }
+        // Add edges to the tree
+        /*tree.addEdge(1, "root", "child1", EdgeType.DIRECTED);
+        tree.addEdge(2, "root", "child2", EdgeType.DIRECTED);*/
 
-        
-        Layout<Integer, String> layout = new CircleLayout<Integer, String>(graph);
-        layout.setSize(new Dimension(750, 750));
-        
-        VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(layout);
-        vv.setPreferredSize(new Dimension(800, 800));
-        
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
-        vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());
-                
-        JFrame frame = new JFrame(graphName);
+        // Create a TreeLayout object to layout the nodes in the tree
+        TreeLayout<String, Integer> layout = new TreeLayout<>(tree);
+
+        // Create a visualization server
+        BasicVisualizationServer<String, Integer> server = new BasicVisualizationServer<>(layout);
+        server.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+
+        // Create a window and add the server to it
+        JFrame frame = new JFrame("Tree Graph Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(vv);
+        frame.setPreferredSize(new Dimension(400, 400));
+        frame.getContentPane().add(server);
         frame.pack();
         frame.setVisible(true);
     }
 }
-

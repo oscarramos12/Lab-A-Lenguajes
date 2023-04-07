@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class arbolLex {
     public static void readYal(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\prueba.yal";
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
         processToken(processLet(dir), dir);
     }
 
@@ -21,15 +21,13 @@ public class arbolLex {
             HashMap<String,String> conjOperaciones = new HashMap<String, String>();
             HashMap<String, String> simpleIDs = new HashMap<String, String>();
             HashMap<String, String> reverse = new HashMap<String, String>();
-            /*String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
-            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";*/
-            String abc = "a|b|c";
-            String ABC = "A|B|C";
+            String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
             String abcTODO = "abcdefghijklmnopqertuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             String numeros = "0|1|2|3|4|5|6|7|8|9";
             String line;
             String key;
-            int keyInt = 0;
+            int keyInt = 100;
             boolean hasKey = false;
             ArrayList<HashMap<String,String>> result = new ArrayList<HashMap<String,String>>();
                 while ((line = reader.readLine()) != null) {
@@ -60,32 +58,32 @@ public class arbolLex {
                                     conjunto = conjunto.replace("'", "");
                                     if(conjunto.equals("A-Z|a-z")){
                                         conjOperaciones.put(key, ABC+"|"+abc);
-                                        simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                        reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                        simpleIDs.put(Integer.toString(keyInt), key);
+                                        reverse.put(key, Integer.toString(keyInt));
                                         keyInt++;
                                     }
                                     else if(conjunto.equals("0-9")){
                                         conjOperaciones.put(key, numeros);
-                                        simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                        reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                        simpleIDs.put(Integer.toString(keyInt), key);
+                                        reverse.put(key, Integer.toString(keyInt));
                                         keyInt++;
                                     }
                                     else if(conjunto.equals("A-Z")){
                                         conjOperaciones.put(key, ABC);
-                                        simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                        reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                        simpleIDs.put(Integer.toString(keyInt), key);
+                                        reverse.put(key, Integer.toString(keyInt));
                                         keyInt++;
                                     }
                                     else if(conjunto.equals("a-z")){
                                         conjOperaciones.put(key, abc);
-                                        simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                        reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                        simpleIDs.put(Integer.toString(keyInt), key);
+                                        reverse.put(key, Integer.toString(keyInt));
                                         keyInt++;
                                     }
                                     else{
                                         conjOperaciones.put(key, conjunto);
-                                        simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                        reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                        simpleIDs.put(Integer.toString(keyInt), key);
+                                        reverse.put(key, Integer.toString(keyInt));
                                         keyInt++;
                                     }
                                 }
@@ -101,8 +99,8 @@ public class arbolLex {
                                         }
                                     }
                                     conjOperaciones.put(key, formateado);
-                                    simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), key);
-                                    reverse.put(key, Character.toString(abcTODO.charAt(keyInt)));
+                                    simpleIDs.put(Integer.toString(keyInt), key);
+                                    reverse.put(key, Integer.toString(keyInt));
                                     keyInt++;
                                 }
                                 else{
@@ -115,18 +113,12 @@ public class arbolLex {
                                                 }
                                                 else{
                                                     if(!simpleIDs.containsValue(operador)){
-                                                        if(keyInt < 52){
-                                                            simpleIDs.put(Character.toString(abcTODO.charAt(keyInt)), operador);
-                                                            reverse.put(operador, Character.toString(abcTODO.charAt(keyInt)));
-                                                            value = value.substring(0, x) + Character.toString(abcTODO.charAt(keyInt)) + value.substring(j, value.length());
+                                                            simpleIDs.put(Integer.toString(keyInt), operador);
+                                                            reverse.put(operador, Integer.toString(keyInt));
+                                                            value = value.substring(0, x) + Integer.toString(keyInt) + value.substring(j, value.length());
                                                             keyInt++;
                                                             x = j - operador.length();
-                                                            break;
-                                                        }
-                                                        else{
-                                                            System.out.println("SE ACABARON LOS IDS EN LET XD!!!!!!!"); 
-                                                            break;
-                                                        }
+                                                            break;     
                                                     }
                                                     else if(value.length() == 2 && (value.charAt(1) == '+' || value.charAt(1) == '?')){
                                                         value = "(" + value.charAt(0) + ")" + value.charAt(1);
@@ -143,13 +135,13 @@ public class arbolLex {
                                         }
                                     }
                                     if(value.contains("'+'")){
-                                        value = value.replace("'+'", "'" + Character.toString((abcTODO.charAt(keyInt))) + "'");
-                                        simpleIDs.put(Character.toString((abcTODO.charAt(keyInt))), "+");
+                                        value = value.replace("'+'", "'" + Integer.toString(keyInt) + "'");
+                                        simpleIDs.put(Integer.toString(keyInt), "+");
                                         keyInt++;
                                     }
                                     if(value.contains("'?'")){
-                                        value = value.replace("'?'", "'" + Character.toString((abcTODO.charAt(keyInt))) + "'");
-                                        simpleIDs.put(Character.toString((abcTODO.charAt(keyInt))), "?");
+                                        value = value.replace("'?'", "'" + Integer.toString(keyInt) + "'");
+                                        simpleIDs.put(Integer.toString(keyInt), "?");
                                         keyInt++;
                                     }
 
@@ -189,8 +181,8 @@ public class arbolLex {
                                         value = "(" + value.charAt(0) + ")" + value.charAt(1);
                                     }
                                     System.out.println("Cambio comillas: " + value);
-                                    value = InFixPostFix.cambioMas(value);
-                                    value = InFixPostFix.cambioInterrogacion(value);
+                                    value = NewcambioMas(value);
+                                    value = NewcambioInterrogacion(value);
                                     conjOperaciones.put(key, value);
                                     System.out.println(value);
                                 }
@@ -280,7 +272,7 @@ public class arbolLex {
             allMaps.add(conjOperaciones);
             allMaps.add(simpleIDs);
             allMaps.add(conjOperaciones);
-            List<Character> todo = Arrays.asList('*','|','^', '@','(',')');
+            List<Character> todo = Arrays.asList('*','|','^', '@','(',')','.');
             for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
                 for (int i = 0; i < bigExpression.length(); i++){
                     if(!todo.contains(bigExpression.charAt(i)) && bigExpression.charAt(i) != ' '){
@@ -379,7 +371,7 @@ public class arbolLex {
 
     public static String newToPostFix(String expression, Character concat)
     {
-        List<Character> operadores = Arrays.asList('+','|','(',')','*','?','^',concat);
+        List<Character> operadores = Arrays.asList('|','(',')','*','^',concat);
         Stack<Character> stack = new Stack<>();
  
         String output = new String("");
@@ -433,5 +425,106 @@ public class arbolLex {
     {
         readYal();
     }
+
+    public static String NewcambioMas(String expresion){
+        List<Character> operadores = Arrays.asList('|','(',')','*','^');
+        if(expresion.contains("+")){
+            for(int i = 0; i < expresion.length(); i++){
+                if(expresion.charAt(i) == '+' && expresion.charAt(i-1) != ')'){
+                    for (int reverse = i; reverse >= 0; reverse--){
+                        if(operadores.contains(expresion.charAt(reverse)) || reverse == 0){
+                            expresion = expresion.substring(0, reverse) + "(" + expresion.substring(reverse, i) + ")" + expresion.substring(i, expresion.length());                     
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < expresion.length(); i++) {
+
+            Character char1 = expresion.charAt(i);
+
+            if (char1.equals('+')) {
+
+                if (Character.toString(expresion.charAt(i-1)).equals(")")) {
+
+                    int parentesis = 0;
+
+                    for (int x = (i-1); x >= 0; x--) {
+                        if ((x != (i-1)) && (Character.toString(expresion.charAt(x)).equals(")"))) {
+
+                            parentesis++;
+
+                        }
+
+                        if ((Character.toString(expresion.charAt(x)).equals("("))) {
+                            if (parentesis != 0) {
+                                parentesis--;
+                            } 
+                            else {
+
+                                String repetir = (String) expresion.subSequence(x, i);
+                                expresion = expresion.substring(0, x) + repetir + repetir + "*" + expresion.substring(i+1);
+
+                            }
+                        }
+                    }
+                } 
+                else {
+
+                    String repetir = Character.toString(expresion.charAt(i-1));
+                    expresion = expresion.substring(0, i-1) + repetir + repetir + "*" +expresion.substring(i+1);
+
+                }
+            }
+        }
+        return expresion;
+    }
+
+
+    public static String NewcambioInterrogacion(String expresion){
+        List<Character> operadores = Arrays.asList('|','(',')','*','^');
+        if(expresion.contains("?")){
+            for(int i = 0; i < expresion.length(); i++){
+                if(expresion.charAt(i) == '?' && expresion.charAt(i-1) != ')'){
+                    for (int reverse = i; reverse >= 0; reverse--){
+                        if(operadores.contains(expresion.charAt(reverse)) || reverse == 0){
+                            expresion = expresion.substring(0, reverse) + "(" + expresion.substring(reverse, i) + ")" + expresion.substring(i, expresion.length());                     
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < expresion.length(); i++) {
+
+            Character char1 = expresion.charAt(i);
+            
+            if (char1.equals('?')) {
+
+                if (Character.toString(expresion.charAt(i-1)).equals(")")) {
+
+                    for (int x = (i-1); x >= 0; x--) {
+
+                        if ((Character.toString(expresion.charAt(x)).equals("("))) {
+                            if (x != 0) {
+                                
+                                String cambioExpresion = (String) expresion.subSequence(x, i);
+                                expresion = expresion.substring(0, x) + "(" + cambioExpresion + "|ε)" + expresion.substring(i+1);
+                                break;
+
+                            }
+                        }
+                    }
+                    
+                } 
+                else {                    
+                    expresion = expresion.substring(0, i-1) + "(" + Character.toString(expresion.charAt(i-1)) + "|ε)" + expresion.substring(i+1);
+                }
+            }
+        }
+        return expresion;
+    }
+
 }
 

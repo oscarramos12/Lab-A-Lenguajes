@@ -50,6 +50,7 @@
         "jgraphx-4.2.2.jar",
         "mxgraph-all.jar",
         "mxgraph-core.jar",
-        "mxgraph-swing.jar"
+        "mxgraph-swing.jar",
+        "org.abego.treelayout.core-1.0.3.jar"
     ]
 }
