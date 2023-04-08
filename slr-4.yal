@@ -13,7 +13,7 @@ let number = digits('.'digits)?('E'['+''-']?digits)?
 
 rule tokens = 
     ws
-  | id        { return ID }               (* Cambie por una acción válida, que devuelva el token *)
+  | id        { return ID }               * Cambie por una acción válida, que devuelva el token *)
   | number    { return NUMBER }
   | ';'       { return SEMICOLON }
   | ":="      { return ASSIGNOP }

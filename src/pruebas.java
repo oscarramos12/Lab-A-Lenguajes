@@ -3,13 +3,13 @@ import javax.swing.JFrame;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.util.ArrayList;
-import java.awt.image.BufferedImage;
+/*import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import com.mxgraph.util.mxCellRenderer;
-import java.awt.Color;
+import java.awt.Color;*/
 
 
 public class pruebas {
@@ -22,9 +22,6 @@ public class pruebas {
 
         mxGraph graph = new mxGraph();
         Object parent = graph.getDefaultParent();
-
-        int ID = 2;
-
         // Add nodes to the graph
 
         ArrayList<treeNode> esperando = new ArrayList<treeNode>();
@@ -40,11 +37,10 @@ public class pruebas {
             esperando.remove(0);
             esperandoObj.remove(0);
             for(int i = 0; i < procesando.getHojas().size(); i++){
-                Object child = graph.insertVertex(parent, null, procesando.getHojas().get(i).getValue(), 20 + ((i)*5) * 80, 40*level, 60, 30);
+                Object child = graph.insertVertex(parent, null, procesando.getHojas().get(i).getValue(), 20 + ((i)*5) * 80, 40*level+(i+2), 60, 30);
                 graph.insertEdge(parent, null, "", parentNode, child);
                 esperando.add(procesando.getHojas().get(i));
                 esperandoObj.add(child);
-                ID ++;
             }
             level++;
         }
@@ -61,7 +57,7 @@ public class pruebas {
         graph.insertEdge(parent, null, "", vertex[1], vertex[3]);
         graph.insertEdge(parent, null, "", vertex[2], vertex[3]);*/
 
-        BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null);
+        //BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null);
 
         // Write the image to a file
         /*try {

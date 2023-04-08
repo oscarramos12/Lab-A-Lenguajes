@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class arbolLex {
     public static void readYal(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-1.yal";
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
         processToken(processLet(dir), dir);
     }
 
