@@ -38,7 +38,7 @@ public class graficaAFN {
                     hasVertex.add(getNextVerts.get(i).getDestVert().getID());
                 }
                 if(!hasEdge.contains(Integer.toString(getNextVerts.get(i).getInitVert().getID()) + "-" + Integer.toString(getNextVerts.get(i).getDestVert().getID()))){
-                    graph.addEdge(Character.toString(getNextVerts.get(i).getID()) + "-" + epsilonCounter, newVert.getID(), getNextVerts.get(i).getDestVert().getID());
+                    graph.addEdge(getNextVerts.get(i).getID() + "-" + epsilonCounter, newVert.getID(), getNextVerts.get(i).getDestVert().getID());
                     hasEdge.add(Integer.toString(getNextVerts.get(i).getInitVert().getID()) + "-" + Integer.toString(getNextVerts.get(i).getDestVert().getID()));
                 }
                 if(!getNextVerts.get(i).getDestVert().getVisitedGraph()){
@@ -51,10 +51,10 @@ public class graficaAFN {
 
         
         Layout<Integer, String> layout = new CircleLayout<Integer, String>(graph);
-        layout.setSize(new Dimension(750, 750));
+        layout.setSize(new Dimension(2460, 1340));
         
         VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(layout);
-        vv.setPreferredSize(new Dimension(800, 800));
+        vv.setPreferredSize(new Dimension(2560, 1440));
         
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
         vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<String>());

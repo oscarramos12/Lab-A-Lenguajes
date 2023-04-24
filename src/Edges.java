@@ -1,12 +1,12 @@
 public class Edges {
     public Vertex initVert;
     public Vertex destVert;
-    public Character id;
+    public String id;
 
     public Edges(){
         initVert = null;
         destVert = null;
-        id = '-';
+        id = "-";
     }
 
     public void setDestVert(Vertex destVert){
@@ -15,11 +15,11 @@ public class Edges {
     public void setInitVert(Vertex initVert){
         this.initVert = initVert;
     }
-    public void setID(Character id){
+    public void setID(String id){
         this.id = id;
     }
 
-    public void setAll(Vertex initVert, Vertex destVert, Character id){
+    public void setAll(Vertex initVert, Vertex destVert, String id){
         this.destVert = destVert;
         this.initVert = initVert;
         this.id = id;
@@ -32,7 +32,7 @@ public class Edges {
         return this.initVert;
     }
 
-    public Character getID(){
+    public String getID(){
         return id;
     }
 

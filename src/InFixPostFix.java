@@ -126,7 +126,7 @@ public class InFixPostFix {
         }
         return expresion;
     }
-
+    //creo que el error es que tengo letterordigit cuando no importa solo con que no sea un operador
     public static String toPostFix(String expression, Character concat)
     {
         Stack<Character> stack = new Stack<>();
@@ -169,11 +169,11 @@ public class InFixPostFix {
         return output;
     }
  
-    public static void main(String[] args)
+    /*public static void main(String[] args)
     {
         //(x|t)+((a|m)?)+
         //((e.((.|e)|ε).(f.(((g|-)|ε).e)|ε)).x)
         String expression = "(x|t)+((a|m)?)+";
         System.out.println(toPostFix(expression, '%'));
-    }
+    }*/
 }

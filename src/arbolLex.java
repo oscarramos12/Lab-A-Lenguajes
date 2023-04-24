@@ -11,7 +11,13 @@ import java.util.Stack;
 public class arbolLex {
     public static void readYal(){
         String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
-        processToken(processLet(dir), dir);
+        HashMap<String, String> ptResult = processToken(processLet(dir), dir);
+        String postfix = ptResult.get("-1");
+        ptResult.remove("-1");
+        System.out.println("PT RESUTL: " + ptResult);
+        createTree create = new createTree('@', ptResult);
+        treeNode root = create.buildTree(postfix);
+        pruebas.graficardd(root);
     }
 
     public static ArrayList<HashMap<String,String>> processLet(String dir){
@@ -20,8 +26,11 @@ public class arbolLex {
             HashMap<String,String> conjOperaciones = new HashMap<String, String>();
             HashMap<String, String> simpleIDs = new HashMap<String, String>();
             HashMap<String, String> reverse = new HashMap<String, String>();
-            String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
-            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
+            /*String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";*/
+            String abc = "a|b";
+            String ABC = "A|B";
+            //String numeros = "0|1|2|3|4|5|6|7|8|9";
             String numeros = "0|1|2|3|4|5|6|7|8|9";
             String line;
             String key;
@@ -143,7 +152,7 @@ public class arbolLex {
                                         keyInt++;
                                     }
 
-                                    System.out.println("ANSTES: " + value);
+                                    //System.out.println("ANSTES: " + value);
                                     for(int k = 0; k < value.length(); k++){
                                         if(value.charAt(k) == '[' && (value.charAt(k + 1) == '\'')){
                                             String newInsert = "(";
@@ -178,20 +187,20 @@ public class arbolLex {
                                     if(value.length() == 2 && (value.charAt(1) == '?' || value.charAt(1) == '+')){
                                         value = "(" + value.charAt(0) + ")" + value.charAt(1);
                                     }
-                                    System.out.println("Cambio comillas: " + value);
+                                    //System.out.println("Cambio comillas: " + value);
                                     value = NewcambioMas(value);
                                     value = NewcambioInterrogacion(value);
                                     conjOperaciones.put(key, value);
-                                    System.out.println(value);
+                                    //System.out.println(value);
                                 }
                             }                        
                         }
                     }
                 }
                 reader.close();
-                System.out.println("HashMap:");
-                System.out.println(simpleIDs);
-                System.out.println(conjOperaciones);
+                //System.out.println("HashMap:");
+                //System.out.println(simpleIDs);
+                //System.out.println(conjOperaciones);
                 result.add(conjOperaciones);
                 result.add(simpleIDs);
                 return result;
@@ -201,7 +210,7 @@ public class arbolLex {
             }
     }   
 
-    public static void processToken(ArrayList<HashMap<String,String>> results, String dir ){
+    public static HashMap<String, String> processToken(ArrayList<HashMap<String,String>> results, String dir ){
         try{
             BufferedReader reader = new BufferedReader(new FileReader(dir));
             String line;
@@ -211,7 +220,7 @@ public class arbolLex {
             int newIDsInt = 10000000;
             String bigExpression = "";
             while ((line = reader.readLine()) != null) {
-                if(line.contains("rule tokens")){
+                if(line.contains("rule")){
                     while ((line = reader.readLine()) != null) {
                         //line = reader.readLine();
                         if(!line.isEmpty()){
@@ -264,7 +273,7 @@ public class arbolLex {
                 }   
             }
             bigExpression = bigExpression.substring(0, bigExpression.length()-1);
-            System.out.println("BIG EXPRESSION: " + bigExpression);
+            //System.out.println("BIG EXPRESSION: " + bigExpression);
             ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
             allMaps.add(simpleIDs);
             allMaps.add(conjOperaciones);
@@ -313,12 +322,149 @@ public class arbolLex {
             String newFormatBig = newFormatTree(bigExpression, '@');
             String postFix = newToPostFix(newFormatBig, '@');
             System.out.println("POSTFIX:" + postFix);
-            createTree create = new createTree('@', newIDs);
-            treeNode root = create.buildTree(postFix);
-            pruebas.graficardd(root);
+            newIDs.put("-1", postFix);
             reader.close();
+            return newIDs;
+            
         }catch (IOException e){
                 System.err.println("Error reading file: " + e.getMessage());
+                return null;
+            }
+    }
+
+    public static ArrayList<String> processTokenAFN(ArrayList<HashMap<String,String>> results, String dir ){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(dir));
+            String line;
+            HashMap<String, String> conjOperaciones = results.get(0);
+            HashMap<String, String> simpleIDs = results.get(1);
+            System.out.println(conjOperaciones);
+            System.out.println(simpleIDs);
+            String single = "";
+            ArrayList<String> singleExpressions = new ArrayList<String>();
+            HashMap<String, String> specialCase = new HashMap<String, String>();
+            specialCase.put("+", "plusSymbol");
+            specialCase.put("?", "questionSymbol");
+            specialCase.put("(", "lparenSymbol");
+            specialCase.put(")", "rparenSymbol");
+            specialCase.put("|", "orSymbol");
+            specialCase.put("*", "multiSymbol");
+            specialCase.put("^", "elevadoSymbol");
+
+
+            ArrayList<HashMap<String, String>> allMaps = new ArrayList<HashMap<String, String>>();
+            allMaps.add(simpleIDs);
+            allMaps.add(conjOperaciones);
+            allMaps.add(simpleIDs);
+            allMaps.add(conjOperaciones);
+            List<Character> todo = Arrays.asList('*','|','^', '@','(',')','.');
+
+            while ((line = reader.readLine()) != null) {
+                if(line.contains("rule")){
+                    while ((line = reader.readLine()) != null) {
+                        //line = reader.readLine();
+                        if(!line.isEmpty()){
+                            if(line.contains("return")){
+                                String token = "";
+                                for (int findChar = 0; findChar < line.length(); findChar++){
+                                    if(line.charAt(findChar) != ' ' && line.charAt(findChar) != '{' && line.charAt(findChar) != '|' && line.charAt(findChar) != '\'' && line.charAt(findChar) != '\"'){
+                                        token += line.charAt(findChar);
+                                    }
+                                    else if(line.charAt(findChar) == '{'){
+                                        break;
+                                    }
+                                }
+                                if(conjOperaciones.containsKey(token)){
+                                    single = "";
+                                    int inicio = line.indexOf("{");
+                                    int fin = line.indexOf("}");
+                                    String dummy = line.substring(inicio+1, fin);
+                                    dummy = dummy.replace(" ", "");
+                                    dummy = dummy.replace("return", "");
+                                    single = "((" + conjOperaciones.get(token) + ")" + dummy + ")";
+                                    for(int mapIndex = 0; mapIndex < allMaps.size(); mapIndex++){
+                                        for (int i = 0; i < single.length(); i++){
+                                            if(!todo.contains(single.charAt(i)) && single.charAt(i) != ' '){
+                                                String word = "";
+                                                for (int getWord = i; getWord < single.length(); getWord++){
+                                                    if(!todo.contains(single.charAt(getWord)) && single.charAt(getWord) != ' '){
+                                                        word += single.charAt(getWord);
+                                                    }
+                                                    else if((!word.equals("")) && (single.charAt(getWord) == ' ' || todo.contains(single.charAt(getWord)))){
+                                                        String inicioSingle = "";
+                                                        if(i == 0){
+                                                            inicioSingle = single.substring(0, 0);
+                                                        }
+                                                        else{
+                                                            inicioSingle = single.substring(0, i);
+                                                        }
+                                                        String finSingle = single.substring(getWord, single.length());
+                                                        if(allMaps.get(mapIndex).containsKey(word)){
+                                                            if(specialCase.containsKey(allMaps.get(mapIndex).get(word))){
+                                                                single = inicioSingle + specialCase.get(allMaps.get(mapIndex).get(word)) + "Special" + finSingle;
+                                                                i = inicioSingle.length() + specialCase.get(allMaps.get(mapIndex).get(word)).length()-1;
+                                                                break;
+                                                            }
+                                                            String replace = allMaps.get(mapIndex).get(word);
+                                                            single = inicioSingle + replace + finSingle;
+                                                            i = inicioSingle.length() + replace.length()-1;
+                                                            break;
+                                                        }
+                                                        else{
+                                                            single = inicioSingle + word + finSingle;
+                                                            i = inicioSingle.length() + word.length()-1;
+                                                            break;
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                            }
+                                            //postFix = postFix.replace(key, value);
+                                        }
+                                    }
+                                    singleExpressions.add(single);
+                                }
+                                else{
+                                    single = "";
+                                    int inicio = line.indexOf("{");
+                                    int fin = line.indexOf("}");
+                                    String dummy = line.substring(inicio+1, fin);
+                                    dummy = dummy.replace(" ", "");
+                                    dummy = dummy.replace("return", "");
+                                    if(specialCase.containsKey(token)){
+                                        single  = "((" + specialCase.get(token) + ")" + dummy + ")";
+                                    }
+                                    else{
+                                        single  = "((" + token + ")" + dummy + ")";
+                                    }
+                                    singleExpressions.add(single);
+                                }
+                            }
+                            else{
+                                String token = "";
+                            for (int findChar = 0; findChar < line.length(); findChar++){
+                                if(line.charAt(findChar) != ' ' && line.charAt(findChar) != '{' && line.charAt(findChar) != '|' && line.charAt(findChar) != '\'' && line.charAt(findChar) != '\"'){
+                                    token += line.charAt(findChar);
+                                }
+                                else if(line.charAt(findChar) == '{'){
+                                    break;
+                                }
+                            }
+                            if(!token.contains("(*")){
+                                conjOperaciones.remove(token);
+                                }
+                            }
+                        }
+                    }
+                }   
+            }
+            reader.close();
+            System.out.println(singleExpressions);
+            return singleExpressions;
+            
+        }catch (IOException e){
+                System.err.println("Error reading file: " + e.getMessage());
+                return null;
             }
     }
 
@@ -360,7 +506,7 @@ public class arbolLex {
             }
         }
         formateado += expresion.charAt(expresion.length() - 1);
-        System.out.println("Formateado:"+formateado);
+        //System.out.println("Formateado:"+formateado);
         return formateado;
         //(a)|((b.(b|d|c)*).e)
         //((e@((.|e)|ε)@(f@(((g|-)|ε)@e)|ε))@x)
@@ -418,11 +564,6 @@ public class arbolLex {
             output += stack.pop();
         }
         return output;
-    }
-
-    public static void main(String[] args)
-    {
-        readYal();
     }
 
     public static String NewcambioMas(String expresion){
@@ -524,6 +665,20 @@ public class arbolLex {
         }
         return expresion;
     }
+
+    public static ArrayList<String> getLexExp(){
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
+        return processTokenAFN(processLet(dir), dir);
+        
+
+        
+    }
+
+    /*public static void main(String[] args)
+    {
+        //readYal();
+        getLexExp();
+    }*/
 
 }
 
