@@ -173,7 +173,7 @@ public class InFixPostFix {
     {
         //(x|t)+((a|m)?)+
         //((e.((.|e)|ε).(f.(((g|-)|ε).e)|ε)).x)
-        String expression = "(x|t)+((a|m)?)+";
+        String expression = "((A|B|a|b(A|B|a|b|(_)*|0|1|2|3|4|5)*)X)";
         System.out.println(toPostFix(expression, '%'));
     }*/
 }

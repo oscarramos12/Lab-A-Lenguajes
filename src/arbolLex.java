@@ -26,11 +26,9 @@ public class arbolLex {
             HashMap<String,String> conjOperaciones = new HashMap<String, String>();
             HashMap<String, String> simpleIDs = new HashMap<String, String>();
             HashMap<String, String> reverse = new HashMap<String, String>();
-            /*String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
-            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";*/
-            String abc = "a|b";
-            String ABC = "A|B";
-            //String numeros = "0|1|2|3|4|5|6|7|8|9";
+            String abc = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+            String ABC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
+
             String numeros = "0|1|2|3|4|5|6|7|8|9";
             String line;
             String key;
@@ -666,8 +664,8 @@ public class arbolLex {
         return expresion;
     }
 
-    public static ArrayList<String> getLexExp(){
-        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\slr-4.yal";
+    public static ArrayList<String> getLexExp(String filename){
+        String dir = "C:\\Users\\Oscar\\Desktop\\Lab A\\" + filename;
         return processTokenAFN(processLet(dir), dir);
         
 

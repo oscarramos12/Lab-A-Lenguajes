@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
-
 
 public class runExpression {
     public static void readFile(String dir, Vertex root){
@@ -17,19 +15,12 @@ public class runExpression {
     }
 
     public static void simular(Vertex root, String line){
-        Vertex currentVert = root;
-        for (int i  = 0; i < line.length(); i++){
-            ArrayList<Edges> edgesList = currentVert.getNextEdges();
-            for(int x = 0; x < edgesList.size(); x++){
-                if(edgesList.get(x).getID().equals(Character.toString(line.charAt(i)))){
-                    currentVert = edgesList.get(x).getDestVert();
-                    ArrayList<Edges> nextEdgesList = currentVert.getNextEdges();
-                    System.out.println(line.charAt(i) + "," + nextEdgesList.get(0).getID());
-                    break;
-                }
-            }
-            currentVert = root;
-        }
+       /* ArrayList<Edges> rootEdges = root.getNextEdges();
+        ArrayList<Edges> esperando = new ArrayList<Edges>(rootEdges);
+        HashMap<String,String> finalStates = new HashMap<String,String>();
+        while(!esperando.isEmpty()){
+            Edges currentEdge = esperando.remove(0);
+        }*/
     }
 
 }

@@ -1,0 +1,2 @@
+var_&start := 10
+var1 := 6 ; var2 := var1 < 1 * 2 + var_&start

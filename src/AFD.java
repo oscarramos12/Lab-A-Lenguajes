@@ -3,9 +3,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-
-
-//hacer atributo en vertex de inicio y fin y tener una lista con ID de vertices de inicio y fin
+import java.util.Map;
 
 public class AFD {
     public static Vertex doAFD(Vertex inicio, Character concat, String input, ArrayList<Vertex> fin){
@@ -35,7 +33,7 @@ public class AFD {
                             //System.out.println(word);
                             if(specialCase.containsKey(word)){
                                 simbols.add(specialCase.get(word));
-                                i = i + specialCase.get(word).length();
+                                i = i + word.length();
                                 word = "";
                             }
                             else{
@@ -54,7 +52,7 @@ public class AFD {
                 }
         }
         simbols.add("ε");
-        System.out.println(simbols.toString());
+        System.out.println(simbols);
         ArrayList<ArrayList<String>> matriz = new ArrayList<ArrayList<String>>();
 
         ArrayList<Vertex> esperando = new ArrayList<Vertex>();
@@ -90,7 +88,10 @@ public class AFD {
                             while(!esperandoTrans.isEmpty()){
                                 if(esperandoTrans.get(0).getID() == "ε"){
                                     Vertex nextTrans = esperandoTrans.get(0).getDestVert();
-                                    if((!connect.contains("|" + nextTrans.getID() + "|")) && (!connect.contains("|" + nextTrans.getID()))){
+                                    String[] inList = connect.split("\\|");
+                                    List<String> check = Arrays.asList(inList);
+                                    //(!connect.contains("|" + nextTrans.getID() + "|")) && (!connect.contains("|" + nextTrans.getID()))
+                                    if(!check.contains(Integer.toString(nextTrans.getID()))){
                                         connect += nextTrans.getID() + "|";
                                     }
                                     ArrayList<Edges> nextTransEdges = new ArrayList<Edges>(nextTrans.getNextEdges());
@@ -118,16 +119,17 @@ public class AFD {
                     self = Integer.toString(vertexRow.getID()) + "|";
                     row.set(row.size()-1, self);
                 }
-                System.out.println(row.toString());
+                //System.out.println(row.toString());
                 matriz.add(row);
             }
         }
      
         //ENDS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ArrayList<Integer> allFinIDs = new ArrayList<Integer>();
-        for (int getIDs = 0; getIDs < fin.size(); getIDs++){
+        for (int getIDs = 1; getIDs < fin.size(); getIDs++){
             allFinIDs.add(fin.get(getIDs).getID());
         }
+        System.out.println(allFinIDs);
 
         ArrayList<String> first = matriz.get(0);
         ArrayList<ArrayList<String>> matriz2 = new ArrayList<ArrayList<String>>();
@@ -180,7 +182,7 @@ public class AFD {
                     }
                 }
             }
-            System.out.println(newTableRow);
+            //System.out.println(newTableRow);
             if(matriz2.size() == 0){
                 for(int i = 1; i < newTableRow.size(); i++){
                     if(!newTableRow.get(i).equals("")){
@@ -222,14 +224,14 @@ public class AFD {
         }
         //System.out.println("MAT: " + matriz2);
         ArrayList<ArrayList<Integer>> matriz2Int = convertToInt(matriz2, allFinIDs);
-        System.out.println(matriz2Int);
-        Vertex inicioAFD = tableToNodes(matriz2Int, simbols);
-        System.out.println("matriz2Int");
+        //System.out.println(matriz2Int);
+       // Vertex inicioAFD = tableToNodes(matriz2Int, simbols);
+        //System.out.println("matriz2Int");
         //minimizar(matriz2Int, simbols);
         Vertex minimizado = minToNodes(minimizar(matriz2Int, simbols), simbols);
-        runExpression.readFile("C:\\Users\\Oscar\\Desktop\\Lab A\\pruebas.txt", minimizado);
-        graficaAFD.graficar(minimizado);
-        return inicioAFD;
+        //graficaAFD.graficar(minimizado);
+        //runExpression.readFile("C:\\Users\\Oscar\\Desktop\\Lab A\\slr-1.2.yal.run", minimizado);
+        return minimizado;
     }
     private static ArrayList<ArrayList<Integer>> convertToInt(ArrayList<ArrayList<String>> matriz,  ArrayList<Integer> allFinIDs){
         ArrayList<ArrayList<Integer>> matrizFinal = new ArrayList<ArrayList<Integer>>();
@@ -310,56 +312,76 @@ public class AFD {
 
     }
 
-    private static Vertex minToNodes(ArrayList<ArrayList<Integer>> matrizFinal, ArrayList<String> simbols){
+    private static Vertex minToNodes(HashMap<Integer, List<Integer>> matrizFinal, ArrayList<String> simbols){
+
+        HashMap<String, String> specialCase = new HashMap<String, String>();
+        specialCase.put("plusSymbolSpecial", "+");
+        specialCase.put("questionSymbolSpecial", "?");
+        specialCase.put("lparenSymbolSpecial", "(");
+        specialCase.put("rparenSymbolSpecial", ")");
+        specialCase.put("orSymbolSpecial", "|");
+        specialCase.put("multiSymbolSpecial", "*");
+        specialCase.put("elevadoSymbolSpecial", "^");
+        specialCase.put("empty", " ");
+
+        List<Integer> aceptacion = matrizFinal.get(-1);
+        matrizFinal.remove(-1);
+
+        System.out.println(aceptacion);
+
         HashMap<Integer,Vertex> vertexMap = new HashMap<Integer,Vertex>();
-        ArrayList<ArrayList<Integer>> duplicates = new ArrayList<ArrayList<Integer>>();
         Vertex root = new Vertex();
-        for (int i = 0; i < matrizFinal.size()-1; i++){
-            ArrayList<Integer> row = matrizFinal.get(i);
-            ArrayList<Integer> rowDup = new ArrayList<Integer>();
-            Vertex vertInitRow = new Vertex();
-            if(vertexMap.containsKey(row.get(0))){
-                vertInitRow = vertexMap.get(row.get(0));
+        for (Map.Entry<Integer, List<Integer>> entry : matrizFinal.entrySet()) {
+            Integer key = entry.getKey();
+            List<Integer> value = entry.getValue();
+            if(key == 0){
+                root.setID(0);
+                vertexMap.put(key, root);
             }
-            vertInitRow.setID(row.get(0));
-            if(i == 0){
-                root = vertInitRow;
-            }
-            ArrayList<Edges> edgeList = new ArrayList<Edges>();
-            rowDup.addAll(row);
-            rowDup.remove(0);
-            //System.out.println("ROW: " + row);
-            if(!duplicates.contains(rowDup)){
-                for(int j = 1; j < row.size(); j++){             
-                    Edges connect = new Edges();
-                    connect.setID((simbols.get(j-1)));
-                    connect.setInitVert(vertInitRow);
-                    if(!vertexMap.containsKey(row.get(j))  && row.get(j) != -1){
-                        Vertex destVert = new Vertex();
-                        destVert.setID(row.get(j));
-                        connect.setDestVert(destVert);
-                        edgeList.add(connect);
-                        vertexMap.put(row.get(j), destVert);
+            if(vertexMap.containsKey(key)){
+                Vertex currentVert = vertexMap.get(key);
+                currentVert.setID(key);
+                ArrayList<Edges> allEdges = new ArrayList<Edges>();
+                for (int goRow = 0 ; goRow < value.size(); goRow++){
+                    if(vertexMap.containsKey(value.get(goRow))){
+                        Edges connect = new Edges();
+                        if(specialCase.containsKey(simbols.get(goRow))){
+                            connect.setID(specialCase.get(simbols.get(goRow)));
+                        }
+                        else{
+                            connect.setID(simbols.get(goRow));
+                        }
+                        connect.setInitVert(currentVert);
+                        connect.setDestVert(vertexMap.get(value.get(goRow)));
+                        allEdges.add(connect);
                     }
-                    else if(vertexMap.containsKey(row.get(j)) && row.get(j) != -1){
-                        connect.setDestVert(vertexMap.get(row.get(j)));
-                        edgeList.add(connect);
+                    else if(value.get(goRow)!=-1){
+                        Edges connect = new Edges();
+                        if(specialCase.containsKey(simbols.get(goRow))){
+                            connect.setID(specialCase.get(simbols.get(goRow)));
+                        }
+                        else{
+                            connect.setID(simbols.get(goRow));
+                        }
+                        connect.setInitVert(currentVert);
+                        Vertex createVertex = new Vertex();
+                        createVertex.setID(value.get(goRow));
+                        if(aceptacion.contains(value.get(goRow))){
+                            createVertex.setIsEnd(true);
+                        }
+                        vertexMap.put(value.get(goRow), createVertex);
+                        connect.setDestVert(createVertex);
+                        allEdges.add(connect);
                     }
-                    if((matrizFinal.get(matrizFinal.size()-1).contains(row.get(0)) && !vertInitRow.getIsEnd())){
-                        vertInitRow.setIsEnd(true);
-                    }
-                    vertInitRow.setNextEdge(edgeList);
                 }
+                currentVert.setNextEdge(allEdges);
             }
-            duplicates.add(rowDup);
-            System.out.println(duplicates);
         }
-        System.out.println(vertexMap);
         return root;
 
     }
 
-    private static ArrayList<ArrayList<Integer>> minimizar (ArrayList<ArrayList<Integer>> matriz, ArrayList<String> simbols){
+    private static HashMap<Integer, List<Integer>> minimizar (ArrayList<ArrayList<Integer>> matriz, ArrayList<String> simbols){
         ArrayList<Integer> aceptacion = matriz.get(matriz.size()-1);
         ArrayList<ArrayList<Integer>> pi = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> returnMatrix = new ArrayList<ArrayList<Integer>>();
@@ -397,7 +419,7 @@ public class AFD {
                         minMatRow.add(-1);
                     }   
                 }
-                System.out.println(minMatRow);
+                //System.out.println(minMatRow);
                 minMatrix.add(minMatRow);
             }
             ArrayList<ArrayList<Integer>> newPi = new ArrayList<ArrayList<Integer>>();
@@ -424,11 +446,6 @@ public class AFD {
                     ID++;
                 }
                 else{
-                    /*for (int j = 0; j < newConjunto.size(); j++){
-                        if(minMatRow.equals(newConjunto.get(j))){
-                            newPi.get(j).add(i);
-                        }
-                    }*/
                     if(reference.containsKey(minMatRow)){
                         newPi.get(reference.get(minMatRow)).add(i);
                     }
@@ -446,19 +463,6 @@ public class AFD {
                 System.out.println(newPi);
                 System.out.println("Min Matriz");
                 returnMatrix = minMatrix;
-                /*for (int i = 0; i < newPi.size(); i++){
-                    if(newPi.get(i).size() > 1){
-                        for (int j = 1; j < newPi.get(i).size(); j++){
-                            int rem = newPi.get(i).get(j);
-                            if(returnMatrix.size() < rem){
-                                returnMatrix.remove(rem);
-                            }
-                            for(int x = 0; x < aceptacion.size(); x++){
-                                aceptacion.set(x, aceptacion.get(x)-1);
-                            }
-                        }
-                    }
-                }*/
                 for (int i = 0; i < returnMatrix.size(); i++){
                     returnMatrix.get(i).add(0,i);
                 }
@@ -469,8 +473,29 @@ public class AFD {
         }
         //System.out.println(matriz);
         //System.out.println(piRow);
+        ArrayList<List<Integer>> noDups = new ArrayList<List<Integer>>();
+        HashMap<Integer, List<Integer>> noDupsAndIDs = new HashMap<Integer, List<Integer>>();
+        int IDcont = 0;
+        ArrayList<Integer> newAceptacion = new ArrayList<Integer>();
+        for (int i = 0; i < returnMatrix.size(); i++){
+            ArrayList<Integer> checkDupRow = returnMatrix.get(i);
+            int checkID = checkDupRow.get(0);
+            List<Integer> noIndex = checkDupRow.subList(1, checkDupRow.size()); 
+            if(!noDups.contains(noIndex) || aceptacion.contains(checkID)){
+                noDupsAndIDs.put(IDcont, noIndex);
+                noDups.add(noIndex);
+                if(aceptacion.contains(checkID)){
+                    newAceptacion.add(IDcont);
+                }
+                IDcont++;
+            }
+
+        }
         returnMatrix.add(aceptacion);
-        return returnMatrix;
+        noDupsAndIDs.put(-1, newAceptacion);
+        //System.out.println("OGMATRIX: " + returnMatrix);
+        //System.out.println("NoDUps: " + noDups);
+        return noDupsAndIDs;
     }
     
 }

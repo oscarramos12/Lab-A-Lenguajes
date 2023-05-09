@@ -145,6 +145,7 @@ public class AFN {
                 inicio.push(newInicio);
 
             }
+            graficaAFD.graficar(inicio.peek());
         }
         //inicio.peek().setID(-99);
         //fin.peek().setID(99);
@@ -201,7 +202,6 @@ public class AFN {
         for (int array = start; array < input.size() - arrayEnd; array++){
             
             String postfix = input.get(array);
-
             postfix = arbolLex.newFormatTree(postfix, concat);
             postfix = arbolLex.NewcambioInterrogacion(postfix);
             postfix = arbolLex.NewcambioMas(postfix);

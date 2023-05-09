@@ -1,0 +1,2 @@
+var := 10
+var1 := 6.a ; var2 := var1 < 1 * 2 + var
