@@ -497,7 +497,6 @@ public class lr {
             }
             System.out.println("BY WORD: " + byWord);
             System.out.println("CLOSURE: " + closure);
-            /*AQUI SE PONDRIAN LOS ESTADOS DE ACEPTACION */
             for (Map.Entry<String ,ArrayList<LinkedHashMap<String, ArrayList<String>>>> newSet : byWord.entrySet()) {
                 String key = newSet.getKey();
                 ArrayList<LinkedHashMap<String, ArrayList<String>>> values = new ArrayList<LinkedHashMap<String, ArrayList<String>>>();
@@ -522,11 +521,28 @@ public class lr {
             }
             System.out.println(closure);
         }
-
-        graficaAFD.graficar(root);
-
-        ArrayList<String> noDoubles = new ArrayList<String>();
-        noDoubles.add("0");
+        while(true){
+            for (Map.Entry<String ,LinkedHashMap<String, ArrayList<String>>> main : closure.entrySet()) {
+                boolean firstSecond = true;
+                if(!main.getKey().equals("0")){
+                    boolean firstString = true;
+                    for (Map.Entry<String, ArrayList<String>> second : main.getValue().entrySet()) {
+                        ArrayList<String> getSecondValue = second.getValue();
+                        String rootValue = getSecondValue.get(0);
+                        if(firstSecond == true && rootValue.charAt(rootValue.length()-1) == '.'){
+                            firstString = false;
+                            break;
+                        }
+                        else if(rootValue.charAt(rootValue.length()-1) != '.'){
+                            System.out.println(getSecondValue);
+                        }
+                        System.out.println(second.getValue());
+                        firstSecond = false;
+                    }
+                }
+                
+            }
+        }
     }
 
     public static boolean hasToken(Vertex rootAFD, String word){
